@@ -4,8 +4,8 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "cicd-darey"
-    key    = "terraform.tfstate"
+    bucket = "g-terra-state"
+    key    = "terraform/pipeline_state"
     region = "eu-west-2"
   }
 }
