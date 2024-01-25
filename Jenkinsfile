@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TF_CLI_ARGS = 'color'
+        TF_CLI_ARGS = '-color'
     }
 
     stages {
@@ -76,7 +76,7 @@ pipeline {
                     input message: 'Do you want to apply changes?', ok: 'Yes'
                     withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         sh 'terraform init'
-                        sh 'terraform apply -input=false tfplan'
+                        sh 'terraform apply -input=false -auto-approve tfplan'
                         echo 'Terraform appy stage completed sucessfully. Resources built'
                     }
                 }
