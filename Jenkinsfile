@@ -6,20 +6,20 @@ pipeline {
     }
 
     stages {
-        /* Create a new branch and scan for changes */
-        stage('Create Branch and Scan') {
-            steps {
-                script {
-                    // Create a new branch named "test_branch" from main
-                    sh 'git checkout main'
-                    sh 'git checkout -b test_branch'
-                    sh 'git push origin test_branch'
+        // /* Create a new branch and scan for changes */
+        // stage('Create Branch and Scan') {
+        //     steps {
+        //         script {
+        //             // Create a new branch named "test_branch" from main
+        //             sh 'git checkout main'
+        //             sh 'git checkout -b test_branch'
+        //             sh 'git push origin test_branch'
 
-                    // Scan the Jenkins pipeline for new branches
-                    build job: 'Jenkins-Pipeline-Scanner', parameters: [string(name: 'BRANCH_NAME', value: 'test_branch')]
-                }
-            }
-        }
+        //             // Scan the Jenkins pipeline for new branches
+        //             build job: 'Jenkins-Pipeline-Scanner', parameters: [string(name: 'BRANCH_NAME', value: 'test_branch')]
+        //         }
+        //     }
+        // }
 
         /* Checkout the code from the triggered branch */
         stage('Checkout') {
