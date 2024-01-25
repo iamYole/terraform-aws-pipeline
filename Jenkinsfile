@@ -89,8 +89,8 @@ pipeline {
         always {
             script {
                 echo 'Waiting for 5 minutes before cleanup...'
-                sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
-                
+                sleep(time: 1, unit: 'MINUTES')  // Delay for 5 minutes
+
                 echo 'Cleaning up workspace'
                 sh 'terraform destroy -auto-approve'  // Always destroy applied resources
                 deleteDir()
