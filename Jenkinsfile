@@ -10,13 +10,13 @@ pipeline {
         stage('Create Branch and Scan') {
             steps {
                 script {
-                    // Create a new branch named "refactor" from main
+                    // Create a new branch named "test_branch" from main
                     sh 'git checkout main'
-                    sh 'git checkout -b refactor'
-                    sh 'git push origin refactor'
+                    sh 'git checkout -b test_branch'
+                    sh 'git push origin test_branch'
 
                     // Scan the Jenkins pipeline for new branches
-                    build job: 'Jenkins-Pipeline-Scanner', parameters: [string(name: 'BRANCH_NAME', value: 'refactor')]
+                    build job: 'Jenkins-Pipeline-Scanner', parameters: [string(name: 'BRANCH_NAME', value: 'test_branch')]
                 }
             }
         }
