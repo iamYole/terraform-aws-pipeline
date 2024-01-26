@@ -45,7 +45,7 @@ pipeline {
                         echo 'Lint check completed sucessfully'
                     } catch (err) {
                         currentBuild.result = 'FAILURE'
-                        error("Terraform linting failed: ${err}")
+                        error("The errrorrrrrr is hhhhheeeerrrrr    Terraform linting failed: ${err}")
                     }
                 }
             }
