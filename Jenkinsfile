@@ -82,7 +82,7 @@ pipeline {
             steps {
                 script {
                     steps {
-                        // Define the input step with a default value of 'Yes'
+                        // Define the input step with a default value of 'No'
                         def userInput = input(
                             id: 'userInput',
                             message: 'Do you want to apply changes?',
@@ -106,19 +106,19 @@ pipeline {
         }
 
     /* Cleanup stage */
-    post {
-        always {
-            script {
-               withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                echo 'Waiting for 5 minutes before cleanup...'
-                sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
+        post {
+            always {
+                script {
+                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        echo 'Waiting for 5 minutes before cleanup...'
+                        sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
 
-                echo 'Cleaning up workspace'
-                sh 'terraform destroy -auto-approve'  // Always destroy applied resources
-                deleteDir()
-            }
+                        echo 'Cleaning up workspace'
+                        sh 'terraform destroy -auto-approve'  // Always destroy applied resources
+                        deleteDir()
+                    }
+                }
             }
         }
     }
-}
 }
