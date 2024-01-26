@@ -81,25 +81,23 @@ pipeline {
             }
             steps {
                 script {
-                    steps {
-                        // Define the input step with a default value of 'No'
-                        def userInput = input(
-                            id: 'userInput',
-                            message: 'Do you want to apply changes?',
-                            parameters: [string(defaultValue: 'No', description: 'Enter "Yes" to apply changes', name: 'confirmation')],
-                            submitter: 'auto'
-                        )
+                    // Define the input step with a default value of 'No'
+                    def userInput = input(
+                        id: 'userInput',
+                        message: 'Do you want to apply changes?',
+                        parameters: [string(defaultValue: 'No', description: 'Enter "Yes" to apply changes', name: 'confirmation')],
+                        submitter: 'auto'
+                    )
 
-                        // Check if the user input is 'Yes'
-                        if (userInput == 'Yes') {
-                            withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                                sh 'terraform init'
-                                sh 'terraform apply -input=false -auto-approve tfplan'
-                                echo 'Terraform apply stage completed successfully. Resources built'
-                            }
-                        } else {
-                            echo 'Skipping Terraform apply stage as user chose not to apply changes.'
+                    // Check if the user input is 'Yes'
+                    if (userInput == 'Yes') {
+                        withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                            sh 'terraform init'
+                            sh 'terraform apply -input=false -auto-approve tfplan'
+                            echo 'Terraform apply stage completed successfully. Resources built'
                         }
+                    } else {
+                        echo 'Skipping Terraform apply stage as user chose not to apply changes.'
                     }
                 }
             }
