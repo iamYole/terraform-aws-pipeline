@@ -47,7 +47,7 @@ pipeline {
                         echo 'Lint check completed sucessfully'
                     } catch (err) {
                         currentBuild.result = 'FAILURE'
-                        error("The errrorrrrrr is hhhhheeeerrrrr    Terraform linting failed: ${err}")
+                        error("Terraform linting failed: ${err}")
                     }
                     }
                 }
@@ -91,12 +91,14 @@ pipeline {
     post {
         always {
             script {
+               withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 echo 'Waiting for 5 minutes before cleanup...'
                 //sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
 
                 echo 'Cleaning up workspace'
                 sh 'terraform destroy -auto-approve'  // Always destroy applied resources
                 deleteDir()
+            }
             }
         }
     }
