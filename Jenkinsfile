@@ -35,6 +35,7 @@ pipeline {
         stage('Terraform Validate and Lint') {
             steps {
                 script {
+                    sh 'terraform init'
                     echo 'Validating Terraform configuration'
                     sh 'terraform validate'
                     echo 'Validation completed sucessfully'
