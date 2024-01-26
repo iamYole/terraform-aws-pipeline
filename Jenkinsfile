@@ -81,17 +81,29 @@ pipeline {
             }
             steps {
                 script {
-                    // Ask for manual confirmation before applying changes
-                    input message: 'Do you want to apply changes?', ok: 'Yes'
-                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        sh 'terraform init'
-                        sh 'terraform apply -input=false -auto-approve tfplan'
-                        echo 'Terraform appy stage completed sucessfully. Resources built'
+                    steps {
+                        // Define the input step with a default value of 'Yes'
+                        def userInput = input(
+                            id: 'userInput',
+                            message: 'Do you want to apply changes?',
+                            parameters: [string(defaultValue: 'No', description: 'Enter "Yes" to apply changes', name: 'confirmation')],
+                            submitter: 'auto'
+                        )
+
+                        // Check if the user input is 'Yes'
+                        if (userInput == 'Yes') {
+                            withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                                sh 'terraform init'
+                                sh 'terraform apply -input=false -auto-approve tfplan'
+                                echo 'Terraform apply stage completed successfully. Resources built'
+                            }
+                        } else {
+                            echo 'Skipping Terraform apply stage as user chose not to apply changes.'
+                        }
                     }
                 }
             }
         }
-    }
 
     /* Cleanup stage */
     post {
@@ -99,7 +111,7 @@ pipeline {
             script {
                withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 echo 'Waiting for 5 minutes before cleanup...'
-                //sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
+                sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
 
                 echo 'Cleaning up workspace'
                 sh 'terraform destroy -auto-approve'  // Always destroy applied resources
