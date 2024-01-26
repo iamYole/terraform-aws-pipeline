@@ -108,8 +108,8 @@ pipeline {
             always {
                 script {
                     withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        echo 'Waiting for 5 minutes before cleanup...'
-                        sleep(time: 5, unit: 'MINUTES')  // Delay for 5 minutes
+                        echo 'Waiting for 3 minutes before cleanup...'
+                        sleep(time: 3, unit: 'MINUTES')  // Delay for 3 minutes
 
                         echo 'Cleaning up workspace'
                         sh 'terraform destroy -auto-approve'  // Always destroy applied resources
