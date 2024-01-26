@@ -102,6 +102,7 @@ pipeline {
                 }
             }
         }
+    }
 
     /* Cleanup stage */
         post {
@@ -118,5 +119,4 @@ pipeline {
                 }
             }
         }
-    }
 }
