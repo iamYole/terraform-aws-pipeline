@@ -35,6 +35,7 @@ pipeline {
         stage('Terraform Validate and Lint') {
             steps {
                 script {
+                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh 'terraform init'
                     echo 'Validating Terraform configuration'
                     sh 'terraform validate'
@@ -47,6 +48,7 @@ pipeline {
                     } catch (err) {
                         currentBuild.result = 'FAILURE'
                         error("The errrorrrrrr is hhhhheeeerrrrr    Terraform linting failed: ${err}")
+                    }
                     }
                 }
             }
