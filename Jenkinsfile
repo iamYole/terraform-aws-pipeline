@@ -43,8 +43,14 @@ pipeline {
 
                     echo 'Linting Terraform files'
                     try {
-                        sh 'terraform fmt -check'  
-                        echo 'Lint check completed sucessfully'
+                        def fmtOutput = sh(script: 'terraform fmt -check', returnStdout: true).trim()
+                        if(fmtOutput.isEmpty()){
+                            echo 'Lint check completed sucessfully'
+                        }else{
+                            echo "Terraform formatting issues found:\n${fmtOutput}"
+                            currentBuild.result = 'FAILURE'
+                        } 
+                        
                     } catch (err) {
                         currentBuild.result = 'FAILURE'
                         error("Terraform linting failed: ${err}")
